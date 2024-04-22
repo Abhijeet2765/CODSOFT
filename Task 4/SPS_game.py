@@ -4,13 +4,14 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import Sized
 
+
 class SPS_game:
     def __init__(self,root):
         self.root=root
         self.root.geometry("1000x500+0+0")
         self.root.title("Stone, Papper, Sissor")
         self.root.resizable(False,False)
-        self.Lst=["Stone","Paper","Scissor"]
+        self.Lst=("Stone","Paper","Scissor")
         bg_color="#A7FF19"
 
         self.state=IntVar(value=0)
@@ -52,10 +53,17 @@ class SPS_game:
         F2.place(x=710,y=0,height=500,width=290)
         score_title=Label(F2,text="Score", font="arial 15 bold",bd=7,relief=GROOVE).pack(fill=X)
         scroll_y=Scrollbar(F2,orient=VERTICAL)
-        self.txtarea=Text(F2,yscrollcommand=scroll_y.set)
+        self.txtarea=Text(F2,yscrollcommand=scroll_y.set,font=("times new roman", 10, "bold"))
         scroll_y.pack(side=RIGHT,fill=Y)
         scroll_y.config(command=self.txtarea.yview)
         self.txtarea.pack(fill=BOTH,expand=1)
+        id1=Label(self.txtarea,text="Player", fg="black",font=("times new roman",20,"bold"),bg=bg_color)
+        id1.grid(row=0,column=0,padx=10)
+        id2=Label(self.txtarea,text="Computer", fg="black",font=("times new roman",20,"bold"),bg=bg_color)
+        id2.grid(row=0,column=1,padx=10)
+        self.txtarea.delete('1.0',END)
+        self.txtarea.insert(END,"\n\n\n===================================")
+
 
 
 
@@ -68,6 +76,19 @@ class SPS_game:
         self.computer_img = tk.PhotoImage(file=f"{self.s_choice}.png")
         self.img2.config(image=self.computer_img)
         self.img2.image = self.computer_img
+
+        if(self.s_choice=="Stone"):
+            messagebox.showinfo("Info","You had a Tie")
+            self.txtarea.insert(END,"\n\t0 \t\t 0")
+
+        elif(self.s_choice=="Scissor"):
+            messagebox.showinfo("Info","You Win")
+            self.txtarea.insert(END,"\n\t1 \t\t 0")
+
+        else:
+            messagebox.showinfo("Info","You Loose")
+            self.txtarea.insert(END,"\n\t0 \t\t 1")
+                 
         
     def paper(self):
         self.state.set(0)
@@ -79,6 +100,20 @@ class SPS_game:
         self.img2.config(image=self.computer_img)
         self.img2.image = self.computer_img
 
+        if(self.s_choice=="Paper"):
+            messagebox.showinfo("Info","You had a Tie")
+            self.txtarea.insert(END,"\n\t0 \t\t 0")
+
+        elif(self.s_choice=="Stone"):
+            messagebox.showinfo("Info","You Win")
+            self.txtarea.insert(END,"\n\t1 \t\t 0")
+
+        else:
+            messagebox.showinfo("Info","You Loose")
+            self.txtarea.insert(END,"\n\t0 \t\t 1")
+
+
+
     def scissor(self):
         self.state.set(0)
         self.s_choice = random.choice(self.Lst)
@@ -89,17 +124,34 @@ class SPS_game:
         self.img2.config(image=self.computer_img)
         self.img2.image = self.computer_img
 
+        if(self.s_choice=="Scissor"):
+            messagebox.showinfo("Info","You had a Tie")
+            self.txtarea.insert(END,"\n\t0 \t\t 0")
+
+        elif(self.s_choice=="Paper"):
+            messagebox.showinfo("Info","You Won")
+            self.txtarea.insert(END,"\n\t1 \t\t 0")
+
+        else:
+            messagebox.showinfo("Info","You Loose")
+            self.txtarea.insert(END,"\n\t0 \t\t 1")
+
+
     def new_game(self):
         result=messagebox.askyesno("Confirmation", "Do you want to start a New Game:")
         
         if result:
-                self.txtarea.set(command=root.destroy)
+            self.root.destroy()  # Destroy current instance
+            new_root = tk.Tk()   # Create new root window
+            obj = SPS_game(new_root)  # Create new instance of the main application class
+            new_root.mainloop() 
         else:
                 print("No button clicked")
         
 
     def close_window(self):
         root.destroy()
+
     
 root=Tk()
 obj=SPS_game(root)
